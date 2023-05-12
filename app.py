@@ -9,6 +9,7 @@ app_config = {
     "CACHE_TYPE": app.config.get("CACHE_TYPE", "SimpleCache"),
     "CACHE_DEFAULT_TIMEOUT": app.config.get("CACHE_DEFAULT_TIMEOUT", 300),
 }
+
 if app_config.get("CACHE_TYPE") == "RedisCache":
     app_config.update(
         {
@@ -16,6 +17,7 @@ if app_config.get("CACHE_TYPE") == "RedisCache":
             "CACHE_REDIS_DB": app.config.get("CACHE_REDIS_DB"),
         }
     )
+
 app.config.from_mapping(app_config)
 
 cache = Cache(app)
