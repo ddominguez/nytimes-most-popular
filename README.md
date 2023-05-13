@@ -19,7 +19,7 @@ FLASK_CACHE_REDIS_HOST=redis
 FLASK_CACHE_REDIS_DB=0
 ```
 
-### Create docker-compose.override.yaml file
+### Create docker-compose.override.yml file
 ```
 services:
   web:
@@ -32,5 +32,5 @@ services:
 make web-up
 ```
 
-Open Flask App - `http://localhost:5000/`
-Open RedisStack Browser - `http://localhost:8001/`
+* Open Flask App - `http://localhost:5000/`
+* Open RedisStack Browser - `http://localhost:8001/`
