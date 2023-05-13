@@ -2,9 +2,21 @@ services:
   web:
     build: .
     ports:
-      - 5000:5000
+      - "5000:5000"
     command: flask run -h 0.0.0.0 -p 5000
     volumes:
       - .:/app
     environment:
+      - FLASK_DEBUG
       - FLASK_NYT_API_KEY
+      - FLASK_CACHE_TYPE
+      - FLASK_CACHE_DEFAULT_TIMEOUT
+      - FLASK_CACHE_REDIS_HOST
+      - FLASK_CACHE_REDIS_DB
+    depends_on:
+      - redis
+  redis:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+      - "8001:8001"
