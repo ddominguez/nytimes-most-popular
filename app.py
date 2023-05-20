@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, abort
 from flask_caching import Cache
 import requests
@@ -6,13 +7,13 @@ import requests
 app = Flask(__name__)
 app.config.from_prefixed_env()
 app_config = {
-    "CACHE_TYPE": app.config.get("CACHE_TYPE", "SimpleCache"),
-    "CACHE_DEFAULT_TIMEOUT": app.config.get("CACHE_DEFAULT_TIMEOUT", 300),
+    "CACHE_TYPE": app.config.get("CACHE_TYPE", "NullCache"),
 }
 
 if app_config.get("CACHE_TYPE") == "RedisCache":
     app_config.update(
         {
+            "CACHE_DEFAULT_TIMEOUT": app.config.get("CACHE_DEFAULT_TIMEOUT", 300),
             "CACHE_REDIS_HOST": app.config.get("CACHE_REDIS_HOST"),
             "CACHE_REDIS_DB": app.config.get("CACHE_REDIS_DB"),
         }
@@ -24,6 +25,10 @@ cache = Cache(app)
 
 LIST_TYPES = ("emailed", "shared", "viewed")
 API_URI = "https://api.nytimes.com/svc/mostpopular/v2/"
+
+
+def prevent_cache():
+    return "PYTEST_CURRENT_TEST" in os.environ
 
 
 def fetch_most_popular(list_type, period=1):
@@ -39,9 +44,9 @@ def index():
 
 
 @app.get("/most-popular/<list_type>")
-@cache.cached()
+@cache.cached(unless=prevent_cache)
 def render_most_popular(list_type=None):
-    if not list_type or list_type not in LIST_TYPES:
+    if list_type not in LIST_TYPES:
         abort(404)
     data = fetch_most_popular(list_type)
     context = {
