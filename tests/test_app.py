@@ -4,6 +4,11 @@ import requests
 from app import app, fetch_most_popular, LIST_TYPES
 
 
+@pytest.fixture(autouse=True)
+def setup(monkeypatch):
+    monkeypatch.setitem(app.config, "NYT_API_KEY", "fake")
+
+
 # https://docs.pytest.org/en/7.3.x/how-to/monkeypatch.html#monkeypatching-returned-objects-building-mock-classes
 class MockResponse:
     @staticmethod
@@ -21,7 +26,6 @@ def mock_most_popular(monkeypatch):
         return MockResponse()
 
     monkeypatch.setattr(requests, "get", mock_get)
-    monkeypatch.setitem(app.config, "NYT_API_KEY", "fake")
 
 
 def test_fetch_most_popular(mock_most_popular):
@@ -35,7 +39,6 @@ def test_index_request():
     assert response.status_code == 200
 
 
-# @pytest.mark.skip()
 @pytest.mark.parametrize(
     "test_param,expected", [(t, 200) for t in LIST_TYPES] + [("bad", 404)]
 )
