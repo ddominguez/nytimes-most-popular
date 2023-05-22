@@ -1,5 +1,5 @@
 dev-run:
-	flask run --debug
+	flask --app mostpopular run --debug
 
 dev-test:
 	pytest -sv

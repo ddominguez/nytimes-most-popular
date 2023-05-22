@@ -3,7 +3,7 @@ services:
     build: .
     ports:
       - "5000:5000"
-    command: flask run -h 0.0.0.0 -p 5000
+    command: flask --app mostpopular run -h 0.0.0.0 -p 5000
     volumes:
       - .:/app
     environment:
