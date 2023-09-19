@@ -6,7 +6,7 @@ from mostpopular.constants import API_URI
 from mostpopular.extensions import cache
 
 
-def fetch_most_popular(api_key, list_type, period=1) -> Any:
+def fetch_most_popular(api_key: str, list_type: str, period: int = 1) -> Any:
     cache_key = f"{list_type}:{period}"
     if cache.has(cache_key):
         return cache.get(cache_key)
