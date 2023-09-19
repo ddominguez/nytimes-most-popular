@@ -9,6 +9,7 @@ def create_app(config={}):
     app.config.from_prefixed_env()
     app_config = {
         "CACHE_TYPE": app.config.get("CACHE_TYPE", "NullCache"),
+        "CACHE_DEFAULT_TIMEOUT": app.config.get("CACHE_DEFAULT_TIMEOUT", 300),
     }
 
     if config:
@@ -17,7 +18,6 @@ def create_app(config={}):
     if app_config.get("CACHE_TYPE") == "RedisCache":
         app_config.update(
             {
-                "CACHE_DEFAULT_TIMEOUT": app.config.get("CACHE_DEFAULT_TIMEOUT", 300),
                 "CACHE_REDIS_HOST": app.config.get("CACHE_REDIS_HOST"),
                 "CACHE_REDIS_DB": app.config.get("CACHE_REDIS_DB"),
             }
