@@ -4,6 +4,9 @@ dev-run:
 dev-test:
 	pytest -sv
 
+dev-mypy:
+	mypy ./mostpopular
+
 web-up:
 	docker compose up
 
